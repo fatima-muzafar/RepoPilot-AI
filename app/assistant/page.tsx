@@ -1,10 +1,10 @@
-import PlaceholderPage from "@/components/shared/PlaceholderPage";
+import { Suspense } from "react";
+import AssistantClient from "./AssistantClient";
 
 export default function AssistantPage() {
   return (
-    <PlaceholderPage
-      title="AI Assistant"
-      description="Ask questions about any GitHub repository."
-    />
+    <Suspense fallback={<div>Loading RepoPilot...</div>}>
+      <AssistantClient />
+    </Suspense>
   );
 }
