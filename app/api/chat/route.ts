@@ -1,5 +1,13 @@
-import { streamText, convertToModelMessages } from "ai";
-import { openrouter, AI_MODEL, SYSTEM_PROMPT } from "@/lib/ai";
+import {
+  streamText,
+  convertToModelMessages,
+} from "ai";
+import {
+  openrouter,
+  AI_MODEL,
+  SYSTEM_PROMPT,
+} from "@/lib/ai";
+import { getRepositoryDetails } from "@/lib/tools";
 
 export async function POST(request: Request) {
   try {
@@ -35,6 +43,10 @@ Repository context:
 ${repositoryContext}`,
 
       messages: modelMessages,
+
+      tools: {
+        get_repository_details: getRepositoryDetails,
+      },
     });
 
     return result.toUIMessageStreamResponse();

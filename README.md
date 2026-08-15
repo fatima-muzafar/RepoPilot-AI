@@ -1,4 +1,6 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RepoPilot AI
+
+RepoPilot AI is a repository-aware AI assistant built with Next.js. It allows users to ask questions about a selected GitHub repository and receive streaming AI responses.
 
 ## Getting Started
 
@@ -6,31 +8,105 @@ First, run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000 in your browser.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## FE-07 — Tool Results and Structured UI
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+FE-07 extends the streaming AI assistant with a server-side GitHub repository tool.
 
-## Learn More
+### Tool: `get_repository_details`
 
-To learn more about Next.js, take a look at the following resources:
+**Purpose:**
+Fetch current metadata and statistics for a GitHub repository.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Input Schema
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+The tool accepts:
 
-## Deploy on Vercel
+```text
+owner: string
+repo: string
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Example:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```json
+{
+  "owner": "facebook",
+  "repo": "react"
+}
+```
+
+The input is validated using Zod before the tool executes.
+
+### Execution
+
+The tool executes server-side and requests repository information from the GitHub API.
+
+The browser does not directly execute the tool.
+
+```text
+User
+  ↓
+RepoPilot AI
+  ↓
+/api/chat
+  ↓
+get_repository_details
+  ↓
+GitHub API
+  ↓
+Structured result
+  ↓
+RepositoryToolResult
+```
+
+### Return Shape
+
+The tool returns:
+
+```text
+{
+  name: string
+  fullName: string
+  owner: string
+  description: string | null
+  stars: number
+  forks: number
+  watchers: number
+  language: string | null
+  license: string | null
+  topics: string[]
+  url: string
+}
+```
+
+### Tool Lifecycle UI
+
+The frontend renders the tool lifecycle as distinct states:
+
+1. **Input streaming** — repository tool input is being generated.
+2. **Input available** — the requested repository is displayed.
+3. **Output available** — the structured repository result is rendered as a repository component.
+4. **Output error** — a designed error state is displayed when the tool execution fails.
+
+Tool results are rendered through the `RepositoryToolResult` component rather than displayed as raw JSON.
+
+## Project Technologies
+
+* Next.js
+* React
+* TypeScript
+* Tailwind CSS
+* AI SDK
+* OpenRouter
+* Zod
+* GitHub REST API
+
+## Deployment
+
+The application can be deployed using Vercel.
+
+Before deployment, configure the required environment variables in the deployment environment.

@@ -4,10 +4,25 @@ import { useEffect, useRef, useState } from "react";
 import { useChat } from "@ai-sdk/react";
 import { useSearchParams } from "next/navigation";
 
+
 import Container from "@/components/layout/Container";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import RepositoryToolResult from "@/components/ai/RepositoryToolResult";
 import type { RepositorySummary } from "@/types/repository";
+
+function RepositoryToolLoading() {
+  return (
+    <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+      <span
+        className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-slate-400"
+        aria-hidden="true"
+      />
+
+      <span>Looking up repository information...</span>
+    </div>
+  );
+}
 
 export default function AssistantClient() {
   const searchParams = useSearchParams();
@@ -311,19 +326,111 @@ export default function AssistantClient() {
                           : "max-w-[90%] break-words rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-800 sm:max-w-[85%]"
                       }
                     >
-                      {message.parts.map(
-                        (part, index) => {
-                          if (part.type !== "text") {
-                            return null;
-                          }
+                      {message.parts.map((part, index) => {
+  if (part.type === "text") {
+    return (
+      <span key={index}>
+        {part.text}
+      </span>
+    );
+  }
 
-                          return (
-                            <span key={index}>
-                              {part.text}
-                            </span>
-                          );
-                        },
-                      )}
+  if (
+    part.type === "tool-get_repository_details" &&
+    part.state === "input-streaming"
+  ) {
+    return (
+      <RepositoryToolLoading key={index} />
+    );
+  }
+
+  if (
+  part.type === "tool-get_repository_details" &&
+  part.state === "input-available"
+) {
+ const input = part.input as {
+  owner: string;
+  repo: string;
+};
+
+  return (
+    <div
+      key={index}
+      className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+    >
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+        Repository lookup
+      </p>
+
+      <p className="mt-1 text-sm font-medium text-slate-900">
+        {input.owner}/{input.repo}
+      </p>
+
+      <p className="mt-1 text-xs text-slate-500">
+        Fetching current repository information...
+      </p>
+    </div>
+  );
+}
+
+if (
+  part.type === "tool-get_repository_details" &&
+  part.state === "output-available"
+) {
+  const output = part.output as {
+    name: string;
+    fullName: string;
+    owner: string;
+    description: string | null;
+    stars: number;
+    forks: number;
+    watchers: number;
+    language: string | null;
+    license: string | null;
+    topics: string[];
+    url: string;
+  };
+
+  return (
+    <RepositoryToolResult
+      key={index}
+      name={output.name}
+      fullName={output.fullName}
+      owner={output.owner}
+      description={output.description}
+      stars={output.stars}
+      forks={output.forks}
+      watchers={output.watchers}
+      language={output.language}
+      license={output.license}
+      topics={output.topics}
+      url={output.url}
+    />
+  );
+}
+
+if (
+  part.type === "tool-get_repository_details" &&
+  part.state === "output-error"
+) {
+  return (
+    <div
+      key={index}
+      role="alert"
+      className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3"
+    >
+      <p className="text-sm font-semibold text-red-800">
+        Repository lookup failed
+      </p>
+
+      <p className="mt-1 text-sm leading-6 text-red-700">
+        We couldn&apos;t retrieve the repository information right now.
+      </p>
+    </div>
+  );
+}
+  return null;
+})}
                     </div>
                   </div>
                 ))}
