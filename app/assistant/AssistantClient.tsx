@@ -25,6 +25,7 @@ function RepositoryToolLoading() {
 }
 
 export default function AssistantClient() {
+  
   const searchParams = useSearchParams();
 
   const ownerParam = searchParams.get("owner");
@@ -47,15 +48,16 @@ export default function AssistantClient() {
 
   const [showJumpToLatest, setShowJumpToLatest] =
     useState(false);
-
+    const [messageInput, setMessageInput] = 
+    useState("");
   const {
-    messages,
-    sendMessage,
-    stop,
-    status,
-    error,
-  } = useChat();
-
+  messages,
+  sendMessage,
+  regenerate,
+  stop,
+  status,
+  error,
+} = useChat();
   const isStreaming =
     status === "submitted" || status === "streaming";
 
@@ -178,23 +180,23 @@ export default function AssistantClient() {
 
     setShowJumpToLatest(false);
   }
+    
+  function handleExamplePrompt(prompt: string) {
+  setMessageInput(prompt);
+}
 
   async function handleSubmit(
     event: React.FormEvent<HTMLFormElement>,
   ) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
-
-    const text = String(
-      formData.get("message") ?? "",
-    ).trim();
+    const text = messageInput.trim();
 
     if (!text || isStreaming || !repository) {
       return;
     }
 
-    event.currentTarget.reset();
+    setMessageInput("");
 
     await sendMessage(
       {
@@ -203,6 +205,7 @@ export default function AssistantClient() {
       {
         body: {
           repository,
+          
         },
       },
     );
@@ -295,20 +298,52 @@ export default function AssistantClient() {
                 aria-busy={isStreaming}
               >
                 {messages.length === 0 && (
-                  <div className="flex min-h-[280px] items-center justify-center px-4 text-center">
-                    <div className="max-w-md">
-                      <h2 className="text-lg font-semibold text-slate-900">
-                        Ask RepoPilot
-                      </h2>
+  <div className="flex min-h-[280px] items-center justify-center px-4 text-center">
+    <div className="max-w-md">
+      <h2 className="text-lg font-semibold text-slate-900">
+        Ask RepoPilot
+      </h2>
 
-                      <p className="mt-2 text-sm leading-6 text-slate-600">
-                        Ask about the repository, its purpose,
-                        technology, architecture, or anything
-                        available in the repository context.
-                      </p>
-                    </div>
-                  </div>
-                )}
+      <p className="mt-2 text-sm leading-6 text-slate-600">
+        Ask about the repository, its purpose,
+        technology, architecture, or anything
+        available in the repository context.
+      </p>
+
+      <div className="mt-5">
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          Try an example
+        </p>
+
+        <div className="mt-3 flex flex-col gap-2">
+          <button
+            type="button"
+            onClick={() =>
+              handleExamplePrompt(
+                "Explain this repository's architecture.",
+              )
+            }
+            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            Explain this repository&apos;s architecture.
+          </button>
+
+          <button
+            type="button"
+            onClick={() =>
+              handleExamplePrompt(
+                "What technologies does this repository use?",
+              )
+            }
+            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+          >
+            What technologies does this repository use?
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
 
                 {messages.map((message) => (
                   <div
@@ -454,17 +489,39 @@ if (
                 )}
 
                 {/* Chat request error */}
-                {error && !isStreaming && (
-                  <div className="flex justify-start">
-                    <div
-                      role="alert"
-                      className="max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
-                    >
-                      Something went wrong while generating
-                      the response. Please try again.
-                    </div>
-                  </div>
-                )}
+{error && !isStreaming && (
+  <div className="flex justify-start">
+    <div
+      role="alert"
+      className="max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
+    >
+      <p className="font-semibold">
+        We couldn&apos;t complete that response.
+      </p>
+
+      <p className="mt-1">
+        Something went wrong while generating the answer.
+        You can retry the failed response without starting
+        a new conversation.
+      </p>
+
+      <Button
+        type="button"
+        className="mt-3 bg-red-600 hover:bg-red-700"
+        onClick={() =>
+          regenerate({
+            body: {
+              repository,
+            },
+          })
+        }
+        disabled={isStreaming}
+      >
+        Retry
+      </Button>
+    </div>
+  </div>
+)}
 
                 {/* Jump-to-latest control */}
                 {showJumpToLatest && (
@@ -492,15 +549,19 @@ if (
                     Ask RepoPilot a question
                   </label>
 
-                  <input
-                    id="message"
-                    name="message"
-                    type="text"
-                    autoComplete="off"
-                    disabled={isStreaming}
-                    placeholder="Ask about this repository..."
-                    className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
-                  />
+                 <input
+  id="message"
+  name="message"
+  type="text"
+  autoComplete="off"
+  value={messageInput}
+  onChange={(event) =>
+    setMessageInput(event.target.value)
+  }
+  disabled={isStreaming}
+  placeholder="Ask about this repository..."
+  className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
+/>
 
                   {isStreaming ? (
                     <Button
