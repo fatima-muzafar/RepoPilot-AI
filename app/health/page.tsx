@@ -20,7 +20,7 @@ export default async function HealthPage() {
       <section className="py-20">
         <h1 className="text-4xl font-bold">Health Check</h1>
 
-        <div className="mt-8 rounded-xl border p-6">
+        <div className="mt-8 rounded-xl border border-slate-300 bg-white p-6 text-slate-900 dark:border-[#4A5C6A] dark:bg-[#11212D] dark:text-[#CCD0CF]">
           <p>
             <strong>Status:</strong> Application Running ✅
           </p>

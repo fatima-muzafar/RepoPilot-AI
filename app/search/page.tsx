@@ -38,15 +38,15 @@ export default function SearchPage() {
   await search(trimmedQuery);
 }
   return (
-    <main className="min-h-screen bg-slate-50 py-12">
+    <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-[#CCD0CF] sm:text-4xl">
               Search GitHub repositories
             </h1>
 
-            <p className="mx-auto mt-3 max-w-2xl text-slate-600">
+            <p className="mx-auto mt-3 max-w-2xl text-slate-600 dark:text-[#9BA8AB]">
               Find a repository and open it to explore its details with
               RepoPilot.
             </p>
@@ -69,7 +69,7 @@ export default function SearchPage() {
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               placeholder="Try react, next.js, vite..."
-              className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100"
+              className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 dark:border-[#4A5C6A] dark:bg-[#11212D] dark:text-[#CCD0CF] dark:placeholder:text-[#9BA8AB]"
             />
 
             <Button
@@ -87,7 +87,7 @@ export default function SearchPage() {
           >
             {isLoading && (
               <Card>
-                <p className="text-sm text-slate-600">
+                <p className="text-sm text-slate-600 dark:text-[#9BA8AB]">
                   Searching GitHub Repositries...
                 </p>
               </Card>
@@ -99,7 +99,7 @@ export default function SearchPage() {
                   Search failed
                 </p>
 
-                <p className="mt-1 text-sm text-slate-600">
+                <p className="mt-1 text-sm text-slate-600 dark:text-[#9BA8AB]">
                   {error}
                 </p>
               </Card>
@@ -110,11 +110,11 @@ export default function SearchPage() {
               !error &&
                repositories.length === 0 && (
                 <Card>
-                  <p className="font-medium text-slate-900">
+                  <p className="font-medium text-slate-900 dark:text-[#CCD0CF]">
                     No repositories found.
                   </p>
 
-                  <p className="mt-1 text-sm text-slate-600">
+                  <p className="mt-1 text-sm text-slate-600 dark:text-[#9BA8AB]">
                     Try a different repository name or keyword.
                   </p>
                 </Card>
@@ -124,20 +124,20 @@ export default function SearchPage() {
               <Card key={repository.id}>
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div className="min-w-0">
-                    <p className="text-sm text-slate-500">
+                    <p className="text-sm text-slate-500 dark:text-[#9BA8AB]">
                       {repository.owner}
                     </p>
 
-                    <h2 className="mt-1 break-words text-xl font-semibold text-slate-900">
+                    <h2 className="mt-1 break-words text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
                       {repository.name}
                     </h2>
 
-                    <p className="mt-2 text-sm leading-6 text-slate-600">
+                    <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-[#9BA8AB]">
                       {repository.description ??
                         "No description provided."}
                     </p>
 
-                    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500">
+                    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-[#9BA8AB]">
                       <span>
                         ★ {formatNumber(repository.stars)}
                       </span>
@@ -157,7 +157,7 @@ export default function SearchPage() {
                     href={`/repository/${encodeURIComponent(
                       repository.owner,
                     )}/${encodeURIComponent(repository.name)}`}
-                    className="shrink-0 rounded-lg border border-slate-300 px-4 py-2 text-center text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="shrink-0 rounded-lg border border-slate-300 px-4 py-2 text-center text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#4A5C6A] dark:text-[#CCD0CF] dark:hover:bg-[#253745]"
                   >
                     Explore
                   </Link>

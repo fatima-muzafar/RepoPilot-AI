@@ -169,10 +169,10 @@ export default function RepositoryPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-slate-50 py-12">
+      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <Card>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-slate-600 dark:text-[#9BA8AB]">
               Loading repository...
             </p>
           </Card>
@@ -183,14 +183,14 @@ export default function RepositoryPage() {
 
   if (error || !repository) {
     return (
-      <main className="min-h-screen bg-slate-50 py-12">
+      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <Card>
-            <h1 className="text-xl font-semibold text-slate-900">
+            <h1 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
               Unable to load repository
             </h1>
 
-            <p className="mt-2 text-sm text-red-600">
+            <p className="mt-2 text-sm text-red-600 dark:text-red-300">
               {error ?? "Repository not found."}
             </p>
 
@@ -209,12 +209,12 @@ export default function RepositoryPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 py-12">
+    <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl">
           <Link
             href="/search"
-            className="text-sm font-medium text-slate-600 hover:text-slate-900"
+            className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-[#9BA8AB] dark:hover:text-[#CCD0CF]"
           >
             ← Back to search
           </Link>
@@ -223,21 +223,21 @@ export default function RepositoryPage() {
             <Card>
               <div className="flex flex-col gap-6">
                 <div>
-                  <p className="text-sm text-slate-500">
+                  <p className="text-sm text-slate-500 dark:text-[#9BA8AB]">
                     {repository.owner}
                   </p>
 
-                  <h1 className="mt-1 break-words text-3xl font-bold text-slate-900">
+                  <h1 className="mt-1 break-words text-3xl font-bold text-slate-900 dark:text-[#CCD0CF]">
                     {repository.name}
                   </h1>
 
-                  <p className="mt-4 text-base leading-7 text-slate-600">
+                  <p className="mt-4 text-base leading-7 text-slate-600 dark:text-[#9BA8AB]">
                     {repository.description ??
                       "No description provided."}
                   </p>
                 </div>
 
-                <div className="flex flex-wrap gap-4 text-sm text-slate-600">
+                <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-[#9BA8AB]">
                   <span>
                     ★ {formatNumber(repository.stars)} stars
                   </span>
@@ -256,12 +256,12 @@ export default function RepositoryPage() {
                   </span>
                 </div>
 
-                <div className="border-t border-slate-200 pt-6">
-                  <p className="text-sm font-medium text-slate-500">
+                <div className="border-t border-slate-200 pt-6 dark:border-[#4A5C6A]">
+                  <p className="text-sm font-medium text-slate-500 dark:text-[#9BA8AB]">
                     Default branch
                   </p>
 
-                  <p className="mt-1 text-sm text-slate-900">
+                  <p className="mt-1 text-sm text-slate-900 dark:text-[#CCD0CF]">
                     {repository.defaultBranch}
                   </p>
                 </div>
@@ -269,7 +269,7 @@ export default function RepositoryPage() {
                 {favoriteError && (
                   <div
                     role="alert"
-                    className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                    className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
                   >
                     {favoriteError}
                   </div>
@@ -282,7 +282,7 @@ export default function RepositoryPage() {
                     )}&repo=${encodeURIComponent(
                       repository.name,
                     )}`}
-                    className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+                    className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800 dark:bg-[#253745] dark:hover:bg-[#4A5C6A]"
                   >
                     Ask RepoPilot
                   </Link>
@@ -307,7 +307,7 @@ export default function RepositoryPage() {
                     href={repository.htmlUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                    className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#4A5C6A] dark:text-[#CCD0CF] dark:hover:bg-[#253745]"
                   >
                     View on GitHub
                   </a>

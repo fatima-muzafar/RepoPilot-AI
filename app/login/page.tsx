@@ -7,7 +7,7 @@ export default function LoginPage() {
     <Suspense
       fallback={
         <div className="flex min-h-[70vh] items-center justify-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-[#9BA8AB]">
             Loading login...
           </p>
         </div>

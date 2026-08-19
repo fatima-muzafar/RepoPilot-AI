@@ -13,7 +13,7 @@ import type { RepositorySummary } from "@/types/repository";
 
 function RepositoryToolLoading() {
   return (
-    <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600">
+    <div className="mt-3 flex items-center gap-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-600 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#9BA8AB]">
       <span
         className="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-slate-400"
         aria-hidden="true"
@@ -213,15 +213,15 @@ export default function AssistantClient() {
 
   if (!owner || !repo) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
-              <h1 className="text-xl font-semibold text-slate-900">
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
                 Unable to start RepoPilot
               </h1>
 
-              <p className="mt-2 text-sm text-red-600">
+              <p className="mt-2 text-sm text-red-600 dark:text-red-300">
                 Repository information is missing.
               </p>
             </Card>
@@ -233,11 +233,11 @@ export default function AssistantClient() {
 
   if (repositoryLoading) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
-              <p className="text-sm text-slate-600">
+              <p className="text-sm text-slate-600 dark:text-[#9BA8AB]">
                 Loading repository context...
               </p>
             </Card>
@@ -249,15 +249,15 @@ export default function AssistantClient() {
 
   if (repositoryError || !repository) {
     return (
-      <main className="min-h-screen bg-slate-50">
+      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
-              <h1 className="text-xl font-semibold text-slate-900">
+              <h1 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
                 Unable to start RepoPilot
               </h1>
 
-              <p className="mt-2 text-sm text-red-600">
+              <p className="mt-2 text-sm text-red-600 dark:text-red-300">
                 {repositoryError ??
                   "Repository context is unavailable."}
               </p>
@@ -269,22 +269,22 @@ export default function AssistantClient() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-50">
+    <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl py-6 sm:py-10">
           <Card>
             <div className="overflow-hidden">
               {/* Repository header */}
-              <div className="border-b border-slate-200 pb-5">
-                <p className="text-sm font-medium text-slate-500">
+              <div className="border-b border-slate-200 pb-5 dark:border-[#4A5C6A]">
+                <p className="text-sm font-medium text-slate-500 dark:text-[#9BA8AB]">
                   RepoPilot AI
                 </p>
 
-                <h1 className="mt-1 break-words text-2xl font-bold text-slate-900">
+                <h1 className="mt-1 break-words text-2xl font-bold text-slate-900 dark:text-[#CCD0CF]">
                   {repository.owner}/{repository.name}
                 </h1>
 
-                <p className="mt-2 text-sm text-slate-600">
+                <p className="mt-2 text-sm text-slate-600 dark:text-[#9BA8AB]">
                   Ask questions about this repository.
                 </p>
               </div>
@@ -300,18 +300,18 @@ export default function AssistantClient() {
                 {messages.length === 0 && (
   <div className="flex min-h-[280px] items-center justify-center px-4 text-center">
     <div className="max-w-md">
-      <h2 className="text-lg font-semibold text-slate-900">
+      <h2 className="text-lg font-semibold text-slate-900 dark:text-[#CCD0CF]">
         Ask RepoPilot
       </h2>
 
-      <p className="mt-2 text-sm leading-6 text-slate-600">
+      <p className="mt-2 text-sm leading-6 text-slate-600 dark:text-[#9BA8AB]">
         Ask about the repository, its purpose,
         technology, architecture, or anything
         available in the repository context.
       </p>
 
       <div className="mt-5">
-        <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+        <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-[#9BA8AB]">
           Try an example
         </p>
 
@@ -323,7 +323,7 @@ export default function AssistantClient() {
                 "Explain this repository's architecture.",
               )
             }
-            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#CCD0CF] dark:hover:bg-[#4A5C6A]"
           >
             Explain this repository&apos;s architecture.
           </button>
@@ -335,7 +335,7 @@ export default function AssistantClient() {
                 "What technologies does this repository use?",
               )
             }
-            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50"
+            className="rounded-lg border border-slate-200 bg-white px-4 py-3 text-left text-sm text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#CCD0CF] dark:hover:bg-[#4A5C6A]"
           >
             What technologies does this repository use?
           </button>
@@ -357,8 +357,8 @@ export default function AssistantClient() {
                     <div
                       className={
                         message.role === "user"
-                          ? "max-w-[90%] break-words rounded-2xl rounded-br-md bg-slate-900 px-4 py-3 text-sm leading-6 text-white sm:max-w-[85%]"
-                          : "max-w-[90%] break-words rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-800 sm:max-w-[85%]"
+                          ? "max-w-[90%] break-words rounded-2xl rounded-br-md bg-slate-900 px-4 py-3 text-sm leading-6 text-white sm:max-w-[85%] dark:bg-[#253745]"
+                          : "max-w-[90%] break-words rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm leading-6 text-slate-800 sm:max-w-[85%] dark:border-[#4A5C6A] dark:bg-[#11212D] dark:text-[#CCD0CF]"
                       }
                     >
                       {message.parts.map((part, index) => {
@@ -391,17 +391,17 @@ export default function AssistantClient() {
   return (
     <div
       key={index}
-      className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3"
+      className="mt-3 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 dark:border-[#4A5C6A] dark:bg-[#253745]"
     >
-      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-[#9BA8AB]">
         Repository lookup
       </p>
 
-      <p className="mt-1 text-sm font-medium text-slate-900">
+      <p className="mt-1 text-sm font-medium text-slate-900 dark:text-[#CCD0CF]">
         {input.owner}/{input.repo}
       </p>
 
-      <p className="mt-1 text-xs text-slate-500">
+      <p className="mt-1 text-xs text-slate-500 dark:text-[#9BA8AB]">
         Fetching current repository information...
       </p>
     </div>
@@ -452,13 +452,13 @@ if (
     <div
       key={index}
       role="alert"
-      className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3"
+      className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900 dark:bg-red-950"
     >
-      <p className="text-sm font-semibold text-red-800">
+      <p className="text-sm font-semibold text-red-800 dark:text-red-200">
         Repository lookup failed
       </p>
 
-      <p className="mt-1 text-sm leading-6 text-red-700">
+      <p className="mt-1 text-sm leading-6 text-red-200">
         We couldn&apos;t retrieve the repository information right now.
       </p>
     </div>
@@ -473,7 +473,7 @@ if (
                 {/* Thinking indicator appears before first token */}
                 {status === "submitted" && (
                   <div className="flex justify-start">
-                    <div className="rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500">
+                    <div className="rounded-2xl rounded-bl-md border border-slate-200 bg-white px-4 py-3 text-sm text-slate-500 dark:border-[#4A5C6A] dark:bg-[#11212D] dark:text-[#9BA8AB]">
                       <span
                         className="mr-2 inline-block animate-pulse"
                         aria-hidden="true"
@@ -493,7 +493,7 @@ if (
   <div className="flex justify-start">
     <div
       role="alert"
-      className="max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700"
+      className="max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
     >
       <p className="font-semibold">
         We couldn&apos;t complete that response.
@@ -539,7 +539,7 @@ if (
               {/* Input */}
               <form
                 onSubmit={handleSubmit}
-                className="border-t border-slate-200 pt-5"
+                className="border-t border-slate-200 pt-5 dark:border-[#4A5C6A]"
               >
                 <div className="flex flex-col gap-3 sm:flex-row">
                   <label
@@ -560,7 +560,7 @@ if (
   }
   disabled={isStreaming}
   placeholder="Ask about this repository..."
-  className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100"
+                className="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition focus:border-slate-500 focus:ring-2 focus:ring-slate-200 disabled:cursor-not-allowed disabled:bg-slate-100 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#CCD0CF] dark:placeholder:text-[#9BA8AB] dark:disabled:bg-[#11212D]"
 />
 
                   {isStreaming ? (
@@ -580,7 +580,7 @@ if (
                   )}
                 </div>
 
-                <p className="mt-3 text-xs text-slate-500">
+                <p className="mt-3 text-xs text-slate-500 dark:text-[#9BA8AB]">
                   Responses are generated using the repository
                   context shown above.
                 </p>

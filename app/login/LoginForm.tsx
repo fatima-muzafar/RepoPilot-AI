@@ -106,13 +106,13 @@ export default function LoginForm() {
     <Container>
       <section className="flex min-h-[70vh] items-center justify-center py-12">
         <div className="w-full max-w-md">
-          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+          <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm dark:border-[#4A5C6A] dark:bg-[#11212D]">
             <div className="text-center">
               <h1 className="text-3xl font-bold tracking-tight">
                 Welcome back
               </h1>
 
-              <p className="mt-3 text-sm text-gray-600">
+              <p className="mt-3 text-sm text-gray-600 dark:text-[#9BA8AB]">
                 Sign in to your RepoPilot AI account.
               </p>
             </div>
@@ -125,7 +125,7 @@ export default function LoginForm() {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-[#CCD0CF]"
                 >
                   Email
                 </label>
@@ -139,7 +139,7 @@ export default function LoginForm() {
                     errors.email ? "email-error" : undefined
                   }
                   {...register("email")}
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200"
+                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#CCD0CF] dark:placeholder:text-[#9BA8AB] dark:focus:border-[#CCD0CF] dark:focus:ring-[#4A5C6A]"
                 />
 
                 {errors.email && (
@@ -155,7 +155,7 @@ export default function LoginForm() {
               <div>
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium text-gray-700"
+                  className="block text-sm font-medium text-gray-700 dark:text-[#CCD0CF]"
                 >
                   Password
                 </label>
@@ -171,7 +171,7 @@ export default function LoginForm() {
                     errors.password ? "password-error" : undefined
                   }
                   {...register("password")}
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200"
+                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-slate-900 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200 dark:border-[#4A5C6A] dark:bg-[#253745] dark:text-[#CCD0CF] dark:placeholder:text-[#9BA8AB] dark:focus:border-[#CCD0CF] dark:focus:ring-[#4A5C6A]"
                 />
 
                 {errors.password && (
@@ -187,7 +187,7 @@ export default function LoginForm() {
               {firebaseError && (
                 <div
                   role="alert"
-                  className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+                  className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
                 >
                   {firebaseError}
                 </div>
@@ -196,17 +196,17 @@ export default function LoginForm() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
+                className="w-full rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60 dark:bg-[#253745] dark:hover:bg-[#4A5C6A]"
               >
                 {isSubmitting ? "Signing in..." : "Sign in"}
               </button>
             </form>
 
-            <p className="mt-6 text-center text-sm text-gray-600">
+            <p className="mt-6 text-center text-sm text-gray-600 dark:text-[#9BA8AB]">
               Don't have an account?{" "}
               <Link
                 href="/register"
-                className="font-medium text-gray-900 underline underline-offset-4 hover:text-gray-600"
+                className="font-medium text-gray-900 underline underline-offset-4 hover:text-gray-600 dark:text-[#CCD0CF] dark:hover:text-[#9BA8AB]"
               >
                 Create one
               </Link>

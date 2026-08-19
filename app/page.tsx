@@ -10,7 +10,7 @@ export default function HomePage() {
           RepoPilot AI
         </h1>
 
-        <p className="mt-6 max-w-2xl text-lg text-slate-600">
+        <p className="mt-6 max-w-2xl text-lg text-slate-600 dark:text-[#9BA8AB]">
           AI-powered GitHub repository explorer and assistant.
         </p>
 

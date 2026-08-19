@@ -67,19 +67,19 @@ export default function SettingsPage() {
               Settings
             </h1>
 
-            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">
+            <p className="mt-4 text-lg text-slate-600 dark:text-[#9BA8AB]">
               Customize your RepoPilot AI experience.
             </p>
           </div>
 
           <div className="mt-12 space-y-8">
-            <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+            <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm dark:border-[#4A5C6A] dark:bg-[#11212D]">
               <div>
-                <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                <h2 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
                   Appearance
                 </h2>
 
-                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                <p className="mt-2 text-sm text-slate-600 dark:text-[#9BA8AB]">
                   Choose how RepoPilot AI should look.
                 </p>
               </div>
@@ -93,14 +93,14 @@ export default function SettingsPage() {
                     className={`w-full rounded-lg border p-4 text-left transition-colors ${
                       theme === option.value
                         ? "border-blue-600 bg-blue-50 dark:border-blue-500 dark:bg-blue-950"
-                        : "border-slate-200 hover:bg-slate-50 dark:border-slate-700 dark:hover:bg-slate-800"
+                        : "border-slate-200 hover:bg-slate-50 dark:border-[#4A5C6A] dark:hover:bg-[#253745]"
                     }`}
                   >
-                    <p className="font-medium text-slate-900 dark:text-white">
+                    <p className="font-medium text-slate-900 dark:text-[#CCD0CF]">
                       {option.label}
                     </p>
 
-                    <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
+                    <p className="mt-1 text-sm text-slate-600 dark:text-[#9BA8AB]">
                       {option.description}
                     </p>
                   </button>
@@ -109,19 +109,19 @@ export default function SettingsPage() {
             </section>
 
             {!loading && user && (
-              <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm dark:border-slate-700 dark:bg-slate-900">
+              <section className="rounded-xl border border-slate-200 bg-white p-8 shadow-sm dark:border-[#4A5C6A] dark:bg-[#11212D]">
                 <div>
-                  <h2 className="text-xl font-semibold text-slate-900 dark:text-white">
+                  <h2 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
                     Account
                   </h2>
 
-                  <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+                  <p className="mt-2 text-sm text-slate-600 dark:text-[#9BA8AB]">
                     Manage your RepoPilot AI account.
                   </p>
                 </div>
 
                 {logoutError && (
-                  <p className="mt-6 text-sm text-red-600">
+                  <p className="mt-6 text-sm text-red-600 dark:text-red-300">
                     {logoutError}
                   </p>
                 )}
