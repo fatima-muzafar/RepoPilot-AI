@@ -203,7 +203,7 @@ export default function LoginForm() {
             </form>
 
             <p className="mt-6 text-center text-sm text-gray-600 dark:text-[#9BA8AB]">
-              Don't have an account?{" "}
+              don&apos;t have an account?{" "}
               <Link
                 href="/register"
                 className="font-medium text-gray-900 underline underline-offset-4 hover:text-gray-600 dark:text-[#CCD0CF] dark:hover:text-[#9BA8AB]"

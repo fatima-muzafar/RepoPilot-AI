@@ -99,8 +99,6 @@ export default function RepositoryPage() {
 
  useEffect(() => {
   if (!user || !repository) {
-    setIsSaved(false);
-    setFavoriteError(null);
     return;
   }
 

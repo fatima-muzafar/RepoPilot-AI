@@ -28,14 +28,7 @@ export default function FavoritesPage() {
   const [removingId, setRemovingId] = useState<number | null>(null);
 
   useEffect(() => {
-  if (authLoading) {
-    return;
-  }
-
-  if (!user) {
-    setFavorites([]);
-    setIsLoading(false);
-    setError(null);
+  if (authLoading || !user) {
     return;
   }
 
@@ -98,7 +91,7 @@ export default function FavoritesPage() {
     }
   };
 
-  if (authLoading || isLoading) {
+  if (authLoading || (user && isLoading)) {
     return (
       <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
