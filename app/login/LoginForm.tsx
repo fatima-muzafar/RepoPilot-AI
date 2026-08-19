@@ -1,77 +1,65 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createUserWithEmailAndPassword,
-  getAuth,
-  updateProfile,
-} from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 import Container from "@/components/layout/Container";
 import { firebaseApp } from "@/lib/firebase";
 
-const registerSchema = z
-  .object({
-    name: z
-      .string()
-      .trim()
-      .min(2, "Name must be at least 2 characters."),
-    email: z
-      .string()
-      .trim()
-      .email("Please enter a valid email address."),
-    password: z
-      .string()
-      .min(6, "Password must be at least 6 characters."),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match.",
-    path: ["confirmPassword"],
-  });
+const loginSchema = z.object({
+  email: z
+    .string()
+    .trim()
+    .email("Please enter a valid email address."),
+  password: z
+    .string()
+    .min(1, "Please enter your password."),
+});
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type LoginFormData = z.infer<typeof loginSchema>;
 
-export default function RegisterPage() {
+export default function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const redirectPath = searchParams.get("redirect");
+
   const [firebaseError, setFirebaseError] = useState("");
 
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<RegisterFormData>({
-    resolver: zodResolver(registerSchema),
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
-      name: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (data: RegisterFormData) => {
+  const onSubmit = async (data: LoginFormData) => {
     setFirebaseError("");
 
     try {
       const auth = getAuth(firebaseApp);
 
-      const userCredential = await createUserWithEmailAndPassword(
+      await signInWithEmailAndPassword(
         auth,
         data.email,
-        data.password
+        data.password,
       );
 
-      await updateProfile(userCredential.user, {
-        displayName: data.name,
-      });
+      const destination =
+        redirectPath && redirectPath.startsWith("/")
+          ? redirectPath
+          : "/";
 
-      router.push("/login");
+      router.push(destination);
     } catch (error: unknown) {
       if (
         error &&
@@ -81,38 +69,34 @@ export default function RegisterPage() {
         const code = String(error.code);
 
         switch (code) {
-          case "auth/email-already-in-use":
-            setFirebaseError(
-              "An account with this email already exists."
-            );
+          case "auth/invalid-credential":
+          case "auth/user-not-found":
+          case "auth/wrong-password":
+            setFirebaseError("Invalid email or password.");
             break;
 
           case "auth/invalid-email":
-            setFirebaseError(
-              "Please enter a valid email address."
-            );
+            setFirebaseError("Please enter a valid email address.");
             break;
 
-          case "auth/weak-password":
-            setFirebaseError(
-              "Password is too weak. Please choose a stronger password."
-            );
+          case "auth/user-disabled":
+            setFirebaseError("This account has been disabled.");
             break;
 
-          case "auth/operation-not-allowed":
+          case "auth/too-many-requests":
             setFirebaseError(
-              "Email/password registration is not enabled."
+              "Too many login attempts. Please try again later.",
             );
             break;
 
           default:
             setFirebaseError(
-              "Unable to create your account. Please try again."
+              "Unable to sign in. Please try again.",
             );
         }
       } else {
         setFirebaseError(
-          "Unable to create your account. Please try again."
+          "Unable to sign in. Please try again.",
         );
       }
     }
@@ -125,11 +109,11 @@ export default function RegisterPage() {
           <div className="rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
             <div className="text-center">
               <h1 className="text-3xl font-bold tracking-tight">
-                Create your account
+                Welcome back
               </h1>
 
               <p className="mt-3 text-sm text-gray-600">
-                Create your RepoPilot AI account.
+                Sign in to your RepoPilot AI account.
               </p>
             </div>
 
@@ -138,36 +122,6 @@ export default function RegisterPage() {
               className="mt-8 space-y-5"
               noValidate
             >
-              <div>
-                <label
-                  htmlFor="name"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Full name
-                </label>
-
-                <input
-                  id="name"
-                  type="text"
-                  autoComplete="name"
-                  aria-invalid={errors.name ? "true" : "false"}
-                  aria-describedby={
-                    errors.name ? "name-error" : undefined
-                  }
-                  {...register("name")}
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200"
-                />
-
-                {errors.name && (
-                  <p
-                    id="name-error"
-                    className="mt-1 text-sm text-red-600"
-                  >
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-
               <div>
                 <label
                   htmlFor="email"
@@ -209,8 +163,10 @@ export default function RegisterPage() {
                 <input
                   id="password"
                   type="password"
-                  autoComplete="new-password"
-                  aria-invalid={errors.password ? "true" : "false"}
+                  autoComplete="current-password"
+                  aria-invalid={
+                    errors.password ? "true" : "false"
+                  }
                   aria-describedby={
                     errors.password ? "password-error" : undefined
                   }
@@ -224,40 +180,6 @@ export default function RegisterPage() {
                     className="mt-1 text-sm text-red-600"
                   >
                     {errors.password.message}
-                  </p>
-                )}
-              </div>
-
-              <div>
-                <label
-                  htmlFor="confirmPassword"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Confirm password
-                </label>
-
-                <input
-                  id="confirmPassword"
-                  type="password"
-                  autoComplete="new-password"
-                  aria-invalid={
-                    errors.confirmPassword ? "true" : "false"
-                  }
-                  aria-describedby={
-                    errors.confirmPassword
-                      ? "confirm-password-error"
-                      : undefined
-                  }
-                  {...register("confirmPassword")}
-                  className="mt-2 w-full rounded-lg border border-gray-300 px-3 py-2 outline-none transition focus:border-black focus:ring-2 focus:ring-gray-200"
-                />
-
-                {errors.confirmPassword && (
-                  <p
-                    id="confirm-password-error"
-                    className="mt-1 text-sm text-red-600"
-                  >
-                    {errors.confirmPassword.message}
                   </p>
                 )}
               </div>
@@ -276,19 +198,17 @@ export default function RegisterPage() {
                 disabled={isSubmitting}
                 className="w-full rounded-lg bg-gray-900 px-4 py-2.5 font-medium text-white transition hover:bg-gray-800 disabled:cursor-not-allowed disabled:opacity-60"
               >
-                {isSubmitting
-                  ? "Creating account..."
-                  : "Create account"}
+                {isSubmitting ? "Signing in..." : "Sign in"}
               </button>
             </form>
 
             <p className="mt-6 text-center text-sm text-gray-600">
-              Already have an account?{" "}
+              Don't have an account?{" "}
               <Link
-                href="/login"
+                href="/register"
                 className="font-medium text-gray-900 underline underline-offset-4 hover:text-gray-600"
               >
-                Sign in
+                Create one
               </Link>
             </p>
           </div>

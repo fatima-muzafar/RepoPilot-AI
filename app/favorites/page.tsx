@@ -1,36 +1,289 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 import Container from "@/components/layout/Container";
 import Card from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
+import useAuth from "@/hooks/useAuth";
+import {
+  getFavorites,
+  removeFavorite,
+} from "@/lib/favorites";
+import type { RepositorySummary } from "@/types/repository";
+
+function formatNumber(value: number) {
+  return new Intl.NumberFormat("en", {
+    notation: "compact",
+  }).format(value);
+}
 
 export default function FavoritesPage() {
+  const { user, loading: authLoading } = useAuth();
+
+  const [favorites, setFavorites] = useState<RepositorySummary[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [removingId, setRemovingId] = useState<number | null>(null);
+
+  useEffect(() => {
+  if (authLoading) {
+    return;
+  }
+
+  if (!user) {
+    setFavorites([]);
+    setIsLoading(false);
+    setError(null);
+    return;
+  }
+
+  const userId = user.uid;
+
+  let cancelled = false;
+
+  async function loadFavorites() {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const savedRepositories = await getFavorites(userId);
+
+      if (!cancelled) {
+        setFavorites(savedRepositories);
+      }
+    } catch {
+      if (!cancelled) {
+        setError(
+          "Unable to load your favorites. Please try again.",
+        );
+      }
+    } finally {
+      if (!cancelled) {
+        setIsLoading(false);
+      }
+    }
+  }
+
+  loadFavorites();
+
+  return () => {
+    cancelled = true;
+  };
+}, [user, authLoading]);
+
+  const handleRemove = async (repositoryId: number) => {
+    if (!user) {
+      return;
+    }
+
+    setRemovingId(repositoryId);
+    setError(null);
+
+    try {
+      await removeFavorite(user.uid, repositoryId);
+
+      setFavorites((currentFavorites) =>
+        currentFavorites.filter(
+          (repository) => repository.id !== repositoryId,
+        ),
+      );
+    } catch {
+      setError(
+        "Unable to remove this favorite. Please try again.",
+      );
+    } finally {
+      setRemovingId(null);
+    }
+  };
+
+  if (authLoading || isLoading) {
+    return (
+      <main className="min-h-screen bg-slate-50 py-12">
+        <Container>
+          <div className="mx-auto max-w-4xl">
+            <Card>
+              <p className="text-sm text-slate-600">
+                Loading favorites...
+              </p>
+            </Card>
+          </div>
+        </Container>
+      </main>
+    );
+  }
+
+  if (!user) {
+    return (
+      <main className="min-h-screen bg-slate-50 py-12">
+        <Container>
+          <div className="mx-auto max-w-3xl">
+            <Card>
+              <div className="py-12 text-center">
+                <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+                  Favorites
+                </p>
+
+                <h1 className="mt-2 text-3xl font-bold text-slate-900">
+                  Sign in to view your favorites
+                </h1>
+
+                <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-600">
+                  Log in to access the repositories you have saved.
+                </p>
+
+                <Link href="/login" className="mt-6 inline-block">
+                  <Button type="button">
+                    Sign in
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          </div>
+        </Container>
+      </main>
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-50 py-12">
       <Container>
-        <div className="mx-auto max-w-3xl">
-          <Card>
-            <div className="py-12 text-center">
-              <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
-                Favorites
-              </p>
+        <div className="mx-auto max-w-4xl">
+          <div>
+            <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+              Favorites
+            </p>
 
-              <h1 className="mt-2 text-3xl font-bold text-slate-900">
-                No saved repositories yet
-              </h1>
+            <h1 className="mt-2 text-3xl font-bold text-slate-900">
+              Your saved repositories
+            </h1>
 
-              <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-600">
-                Explore repositories and come back here when you
-                have something you want to save.
-              </p>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              Repositories you have saved to your RepoPilot AI account.
+            </p>
+          </div>
 
-              <Link href="/search" className="mt-6 inline-block">
-                <Button type="button">
-                  Explore repositories
-                </Button>
-              </Link>
+          {error && (
+            <div
+              role="alert"
+              className="mt-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            >
+              {error}
             </div>
-          </Card>
+          )}
+
+          {favorites.length === 0 ? (
+            <Card>
+              <div className="py-12 text-center">
+                <p className="text-sm font-medium uppercase tracking-wide text-slate-500">
+                  Favorites
+                </p>
+
+                <h2 className="mt-2 text-2xl font-bold text-slate-900">
+                  No saved repositories yet
+                </h2>
+
+                <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-slate-600">
+                  Explore repositories and save the ones you want to
+                  come back to later.
+                </p>
+
+                <Link
+                  href="/search"
+                  className="mt-6 inline-block"
+                >
+                  <Button type="button">
+                    Explore repositories
+                  </Button>
+                </Link>
+              </div>
+            </Card>
+          ) : (
+            <div className="mt-8 grid gap-6">
+              {favorites.map((repository) => (
+                <Card key={repository.id}>
+                  <div className="flex flex-col gap-5">
+                    <div>
+                      <p className="text-sm text-slate-500">
+                        {repository.owner}
+                      </p>
+
+                      <Link
+                        href={`/repository/${encodeURIComponent(
+                          repository.owner,
+                        )}/${encodeURIComponent(
+                          repository.name,
+                        )}`}
+                        className="mt-1 block break-words text-2xl font-bold text-slate-900 hover:underline"
+                      >
+                        {repository.name}
+                      </Link>
+
+                      <p className="mt-3 text-sm leading-6 text-slate-600">
+                        {repository.description ??
+                          "No description provided."}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-wrap gap-4 text-sm text-slate-600">
+                      <span>
+                        ★ {formatNumber(repository.stars)} stars
+                      </span>
+
+                      <span>
+                        {formatNumber(repository.forks)} forks
+                      </span>
+
+                      <span>
+                        {formatNumber(repository.openIssues)} open issues
+                      </span>
+
+                      <span>
+                        {repository.language ??
+                          "Unknown language"}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col gap-3 border-t border-slate-200 pt-5 sm:flex-row">
+                      <Link
+                        href={`/repository/${encodeURIComponent(
+                          repository.owner,
+                        )}/${encodeURIComponent(
+                          repository.name,
+                        )}`}
+                        className="inline-flex items-center justify-center rounded-lg bg-slate-900 px-5 py-3 text-sm font-medium text-white transition hover:bg-slate-800"
+                      >
+                        View repository
+                      </Link>
+
+                      <Button
+                        type="button"
+                        onClick={() =>
+                          handleRemove(repository.id)
+                        }
+                        disabled={removingId === repository.id}
+                        className="disabled:cursor-not-allowed disabled:opacity-60"
+                      >
+                        {removingId === repository.id
+                          ? "Removing..."
+                          : "Remove favorite"}
+                      </Button>
+
+                      <a
+                        href={repository.htmlUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
+                      >
+                        GitHub
+                      </a>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          )}
         </div>
       </Container>
     </main>

@@ -1,10 +1,19 @@
-import PlaceholderPage from "@/components/shared/PlaceholderPage";
+import { Suspense } from "react";
+
+import LoginForm from "./LoginForm";
 
 export default function LoginPage() {
   return (
-    <PlaceholderPage
-      title="Login"
-      description="Sign in to your RepoPilot AI account."
-    />
+    <Suspense
+      fallback={
+        <div className="flex min-h-[70vh] items-center justify-center">
+          <p className="text-sm text-gray-600">
+            Loading login...
+          </p>
+        </div>
+      }
+    >
+      <LoginForm />
+    </Suspense>
   );
 }
