@@ -93,7 +93,7 @@ export default function FavoritesPage() {
 
   if (authLoading || (user && isLoading)) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-4xl">
             <Card>
@@ -103,13 +103,13 @@ export default function FavoritesPage() {
             </Card>
           </div>
         </Container>
-      </main>
+      </div>
     );
   }
 
   if (!user) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl">
             <Card>
@@ -135,12 +135,12 @@ export default function FavoritesPage() {
             </Card>
           </div>
         </Container>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+    <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl">
           <div>
@@ -279,6 +279,6 @@ export default function FavoritesPage() {
           )}
         </div>
       </Container>
-    </main>
+    </div>
   );
 }

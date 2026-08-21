@@ -27,7 +27,10 @@ export default function Navbar() {
     <header className="border-b border-slate-200 bg-white dark:border-[#4A5C6A] dark:bg-[#11212D]">
       <Container>
         <nav className="flex h-16 items-center justify-between">
-          <Link href="/" className="text-xl font-bold">
+          <Link
+            href="/"
+            className="text-xl font-bold focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
             RepoPilot AI
           </Link>
 
@@ -36,7 +39,7 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-sm font-medium text-gray-600 transition-colors hover:text-black dark:text-[#9BA8AB] dark:hover:text-[#CCD0CF]"
+                className="text-sm font-medium text-gray-600 transition-colors hover:text-black focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:text-[#9BA8AB] dark:hover:text-[#CCD0CF]"
               >
                 {link.label}
               </Link>
@@ -46,14 +49,14 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleLogout}
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 dark:border-[#4A5C6A] dark:hover:bg-[#253745]"
+                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-[#4A5C6A] dark:hover:bg-[#253745]"
               >
                 Logout
               </button>
             ) : (
               <Link
                 href="/login"
-                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 dark:border-[#4A5C6A] dark:hover:bg-[#253745]"
+                className="rounded-lg border border-slate-300 px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 dark:border-[#4A5C6A] dark:hover:bg-[#253745]"
               >
                 Login
               </Link>

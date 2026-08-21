@@ -38,7 +38,7 @@ export default function SearchPage() {
   await search(trimmedQuery);
 }
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+    <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl">
           <div className="text-center">
@@ -167,6 +167,6 @@ export default function SearchPage() {
           </div>
         </div>
       </Container>
-    </main>
+    </div>
   );
 }

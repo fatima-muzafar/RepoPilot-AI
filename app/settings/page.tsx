@@ -89,6 +89,7 @@ export default function SettingsPage() {
                   <button
                     key={option.value}
                     type="button"
+                    aria-pressed={theme === option.value}
                     onClick={() => setTheme(option.value)}
                     className={`w-full rounded-lg border p-4 text-left transition-colors ${
                       theme === option.value

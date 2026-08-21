@@ -17,7 +17,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto flex min-h-[70vh] max-w-3xl items-center py-12">
         <div className="w-full">
@@ -51,6 +51,6 @@ export default function GlobalError({
           </div>
         </div>
       </Container>
-    </main>
+    </div>
   );
 }

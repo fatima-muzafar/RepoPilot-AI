@@ -213,7 +213,7 @@ export default function AssistantClient() {
 
   if (!owner || !repo) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
@@ -227,13 +227,13 @@ export default function AssistantClient() {
             </Card>
           </div>
         </Container>
-      </main>
+      </div>
     );
   }
 
   if (repositoryLoading) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
@@ -243,13 +243,13 @@ export default function AssistantClient() {
             </Card>
           </div>
         </Container>
-      </main>
+      </div>
     );
   }
 
   if (repositoryError || !repository) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
         <Container>
           <div className="mx-auto max-w-3xl py-12">
             <Card>
@@ -264,12 +264,12 @@ export default function AssistantClient() {
             </Card>
           </div>
         </Container>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
+    <div className="min-h-screen bg-[#F8FAFC] dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl py-6 sm:py-10">
           <Card>
@@ -589,6 +589,6 @@ if (
           </Card>
         </div>
       </Container>
-    </main>
+    </div>
   );
 }

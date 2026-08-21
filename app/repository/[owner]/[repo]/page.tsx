@@ -167,7 +167,7 @@ export default function RepositoryPage() {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <Card>
             <p className="text-sm text-slate-600 dark:text-[#9BA8AB]">
@@ -175,13 +175,13 @@ export default function RepositoryPage() {
             </p>
           </Card>
         </Container>
-      </main>
+      </div>
     );
   }
 
   if (error || !repository) {
     return (
-      <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+      <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
         <Container>
           <Card>
             <h1 className="text-xl font-semibold text-slate-900 dark:text-[#CCD0CF]">
@@ -202,12 +202,12 @@ export default function RepositoryPage() {
             </Link>
           </Card>
         </Container>
-      </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
+    <div className="min-h-screen bg-[#F8FAFC] py-12 dark:bg-[#06141B]">
       <Container>
         <div className="mx-auto max-w-4xl">
           <Link
@@ -315,6 +315,6 @@ export default function RepositoryPage() {
           </div>
         </div>
       </Container>
-    </main>
+    </div>
   );
 }
