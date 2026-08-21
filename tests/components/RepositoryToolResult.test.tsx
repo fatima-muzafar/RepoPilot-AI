@@ -99,7 +99,7 @@ describe("RepositoryToolResult", () => {
     render(<RepositoryToolResult {...repository} />);
 
     const githubLink = screen.getByRole("link", {
-      name: "View on GitHub",
+      name: "View on GitHub (opens in a new tab)",
     });
 
     expect(githubLink).toHaveAttribute(
