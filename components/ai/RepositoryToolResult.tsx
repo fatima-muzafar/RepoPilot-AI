@@ -86,6 +86,7 @@ export default function RepositoryToolResult({
         href={url}
         target="_blank"
         rel="noreferrer"
+        aria-label="View on GitHub (opens in a new tab)"
         className="mt-4 inline-block text-sm font-medium text-slate-900 underline dark:text-[#CCD0CF]"
       >
         View on GitHub

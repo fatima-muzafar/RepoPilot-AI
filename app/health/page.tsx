@@ -22,11 +22,13 @@ export default async function HealthPage() {
 
         <div className="mt-8 rounded-xl border border-slate-300 bg-white p-6 text-slate-900 dark:border-[#4A5C6A] dark:bg-[#11212D] dark:text-[#CCD0CF]">
           <p>
-            <strong>Status:</strong> Application Running ✅
+            <strong>Status:</strong> Application Running {" "}
+            <span aria-hidden="true">✅</span>
           </p>
 
           <p className="mt-3">
-            <strong>GitHub API:</strong> Reachable ✅
+            <strong>GitHub API:</strong> Reachable {" "}
+            <span aria-hidden="true">✅</span>
           </p>
 
           <p className="mt-3">

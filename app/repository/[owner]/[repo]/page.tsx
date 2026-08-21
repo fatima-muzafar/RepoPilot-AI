@@ -214,7 +214,8 @@ export default function RepositoryPage() {
             href="/search"
             className="text-sm font-medium text-slate-600 hover:text-slate-900 dark:text-[#9BA8AB] dark:hover:text-[#CCD0CF]"
           >
-            ← Back to search
+            <span aria-hidden="true">←</span>{" "}
+            Back to search
           </Link>
 
           <div className="mt-6">
@@ -237,7 +238,8 @@ export default function RepositoryPage() {
 
                 <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-[#9BA8AB]">
                   <span>
-                    ★ {formatNumber(repository.stars)} stars
+                    <span aria-hidden="true">★</span>{" "}
+                    {formatNumber(repository.stars)} stars
                   </span>
 
                   <span>
@@ -292,6 +294,7 @@ export default function RepositoryPage() {
                       authLoading ||
                       isFavoriteLoading
                     }
+                    aria-busy={isFavoriteLoading}
                     className="disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {isFavoriteLoading
@@ -305,6 +308,7 @@ export default function RepositoryPage() {
                     href={repository.htmlUrl}
                     target="_blank"
                     rel="noreferrer"
+                    aria-label="View on GitHub (opens in a new tab)"
                     className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#4A5C6A] dark:text-[#CCD0CF] dark:hover:bg-[#253745]"
                   >
                     View on GitHub

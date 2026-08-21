@@ -139,7 +139,8 @@ export default function SearchPage() {
 
                     <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-sm text-slate-500 dark:text-[#9BA8AB]">
                       <span>
-                        ★ {formatNumber(repository.stars)}
+                        <span aria-hidden="true">★</span>{" "}
+                        {formatNumber(repository.stars)}
                       </span>
 
                       <span>

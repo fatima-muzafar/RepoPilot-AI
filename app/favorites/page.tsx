@@ -221,7 +221,8 @@ export default function FavoritesPage() {
 
                     <div className="flex flex-wrap gap-4 text-sm text-slate-600 dark:text-[#9BA8AB]">
                       <span>
-                        ★ {formatNumber(repository.stars)} stars
+                        <span aria-hidden="true">★</span>{" "}
+                        {formatNumber(repository.stars)} stars
                       </span>
 
                       <span>
@@ -256,6 +257,7 @@ export default function FavoritesPage() {
                           handleRemove(repository.id)
                         }
                         disabled={removingId === repository.id}
+                        aria-busy={removingId === repository.id}
                         className="disabled:cursor-not-allowed disabled:opacity-60"
                       >
                         {removingId === repository.id
@@ -267,6 +269,7 @@ export default function FavoritesPage() {
                         href={repository.htmlUrl}
                         target="_blank"
                         rel="noreferrer"
+                        aria-label="GitHub (opens in a new tab)"
                         className="inline-flex items-center justify-center rounded-lg border border-slate-300 px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-50 dark:border-[#4A5C6A] dark:text-[#CCD0CF] dark:hover:bg-[#253745]"
                       >
                         GitHub

@@ -131,6 +131,7 @@ export default function SettingsPage() {
                   type="button"
                   className="mt-6"
                   disabled={isLoggingOut}
+                  aria-busy={isLoggingOut}
                   onClick={handleLogout}
                 >
                   {isLoggingOut ? "Logging out..." : "Log out"}
