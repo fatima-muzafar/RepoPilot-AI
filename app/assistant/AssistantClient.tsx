@@ -45,9 +45,13 @@ export default function AssistantClient() {
 
   const messagesContainerRef =
     useRef<HTMLDivElement | null>(null);
+  const stopRequestedRef = useRef(false);
+  const previousToolErrorRef = useRef(false);
 
   const [showJumpToLatest, setShowJumpToLatest] =
     useState(false);
+  const [streamingAnnouncement, setStreamingAnnouncement] =
+    useState("");
     const [messageInput, setMessageInput] = 
     useState("");
   const {
@@ -58,8 +62,44 @@ export default function AssistantClient() {
   status,
   error,
 } = useChat();
+  const previousStatusRef = useRef(status);
   const isStreaming =
     status === "submitted" || status === "streaming";
+  const hasToolError = messages.some((message) =>
+    message.parts.some(
+      (part) =>
+        part.type === "tool-get_repository_details" &&
+        part.state === "output-error",
+    ),
+  );
+
+  useEffect(() => {
+    const previousStatus = previousStatusRef.current;
+    const hadToolError = previousToolErrorRef.current;
+    const wasStreaming =
+      previousStatus === "submitted" ||
+      previousStatus === "streaming";
+
+    if (error && !isStreaming) {
+      setStreamingAnnouncement("Unable to get a response");
+    } else if (hasToolError && !hadToolError) {
+      setStreamingAnnouncement(
+        "Unable to get repository information",
+      );
+    } else if (isStreaming && !wasStreaming) {
+      setStreamingAnnouncement("RepoPilot is responding");
+    } else if (!isStreaming && wasStreaming) {
+      setStreamingAnnouncement(
+        stopRequestedRef.current
+          ? "Response stopped"
+          : "Response complete",
+      );
+      stopRequestedRef.current = false;
+    }
+
+    previousStatusRef.current = status;
+    previousToolErrorRef.current = hasToolError;
+  }, [error, hasToolError, isStreaming, status]);
 
   /*
    * Load the selected repository so the AI always receives
@@ -274,6 +314,15 @@ export default function AssistantClient() {
         <div className="mx-auto max-w-4xl py-6 sm:py-10">
           <Card>
             <div className="overflow-hidden">
+              <div
+                className="sr-only"
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+              >
+                {streamingAnnouncement}
+              </div>
+
               {/* Repository header */}
               <div className="border-b border-slate-200 pb-5 dark:border-[#4A5C6A]">
                 <p className="text-sm font-medium text-slate-500 dark:text-[#9BA8AB]">
@@ -294,7 +343,6 @@ export default function AssistantClient() {
                 ref={messagesContainerRef}
                 onScroll={handleMessagesScroll}
                 className="relative h-[50vh] min-h-[320px] max-h-[520px] space-y-5 overflow-y-auto py-6 pr-2"
-                aria-live="polite"
                 aria-busy={isStreaming}
               >
                 {messages.length === 0 && (
@@ -451,7 +499,6 @@ if (
   return (
     <div
       key={index}
-      role="alert"
       className="mt-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 dark:border-red-900 dark:bg-red-950"
     >
       <p className="text-sm font-semibold text-red-800 dark:text-red-200">
@@ -492,7 +539,6 @@ if (
 {error && !isStreaming && (
   <div className="flex justify-start">
     <div
-      role="alert"
       className="max-w-[90%] rounded-2xl rounded-bl-md border border-red-200 bg-red-50 px-4 py-3 text-sm leading-6 text-red-700 dark:border-red-900 dark:bg-red-950 dark:text-red-200"
     >
       <p className="font-semibold">
@@ -566,7 +612,12 @@ if (
                   {isStreaming ? (
                     <Button
                       type="button"
-                      onClick={() => stop()}
+                      aria-label="Stop response"
+                      aria-busy="true"
+                      onClick={() => {
+                        stopRequestedRef.current = true;
+                        stop();
+                      }}
                     >
                       Stop
                     </Button>
