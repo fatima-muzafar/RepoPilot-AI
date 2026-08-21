@@ -184,7 +184,7 @@ export default function AssistantClient() {
     if (isNearBottom) {
       container.scrollTo({
         top: container.scrollHeight,
-        behavior: "smooth",
+        behavior: isStreaming ? "auto" : "smooth",
       });
 
       setShowJumpToLatest(false);
