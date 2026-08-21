@@ -8,8 +8,14 @@ const mockSendMessage = vi.fn();
 const mockRegenerate = vi.fn();
 const mockStop = vi.fn();
 
+type MockChatMessage = {
+  id: string;
+  role: string;
+  parts: Array<Record<string, unknown>>;
+};
+
 let mockChatState = {
-  messages: [] as any[],
+  messages: [] as MockChatMessage[],
   sendMessage: mockSendMessage,
   regenerate: mockRegenerate,
   stop: mockStop,
@@ -142,7 +148,7 @@ describe("AssistantClient", () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole("button", { name: "Stop" }),
+      screen.getByRole("button", { name: "Stop response" }),
     ).toBeInTheDocument();
 
     expect(
@@ -160,10 +166,8 @@ describe("AssistantClient", () => {
 
     render(<AssistantClient />);
 
-    expect(
-      await screen.findByRole("alert"),
-    ).toHaveTextContent(
-      "We couldn't complete that response.",
+    expect(await screen.findByRole("status")).toHaveTextContent(
+      "Unable to get a response",
     );
 
     expect(
@@ -257,15 +261,18 @@ describe("AssistantClient", () => {
 
     render(<AssistantClient />);
 
-    const alert = await screen.findByRole("alert");
+    const status = await screen.findByRole("status");
 
-    expect(alert).toHaveTextContent(
-      "Repository lookup failed",
+    expect(status).toHaveTextContent(
+      "Unable to get repository information",
     );
 
-    expect(alert).toHaveTextContent(
+    expect(screen.getByText("Repository lookup failed"))
+      .toBeInTheDocument();
+
+    expect(screen.getByText(
       "We couldn't retrieve the repository information right now.",
-    );
+    )).toBeInTheDocument();
   });
 
   it("submits a question with repository context", async () => {

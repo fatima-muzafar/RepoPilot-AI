@@ -45,13 +45,11 @@ export default function AssistantClient() {
 
   const messagesContainerRef =
     useRef<HTMLDivElement | null>(null);
-  const stopRequestedRef = useRef(false);
-  const previousToolErrorRef = useRef(false);
 
   const [showJumpToLatest, setShowJumpToLatest] =
     useState(false);
-  const [streamingAnnouncement, setStreamingAnnouncement] =
-    useState("");
+  const [responseStopped, setResponseStopped] =
+    useState(false);
     const [messageInput, setMessageInput] = 
     useState("");
   const {
@@ -62,7 +60,6 @@ export default function AssistantClient() {
   status,
   error,
 } = useChat();
-  const previousStatusRef = useRef(status);
   const isStreaming =
     status === "submitted" || status === "streaming";
   const hasToolError = messages.some((message) =>
@@ -72,34 +69,20 @@ export default function AssistantClient() {
         part.state === "output-error",
     ),
   );
-
-  useEffect(() => {
-    const previousStatus = previousStatusRef.current;
-    const hadToolError = previousToolErrorRef.current;
-    const wasStreaming =
-      previousStatus === "submitted" ||
-      previousStatus === "streaming";
-
-    if (error && !isStreaming) {
-      setStreamingAnnouncement("Unable to get a response");
-    } else if (hasToolError && !hadToolError) {
-      setStreamingAnnouncement(
-        "Unable to get repository information",
-      );
-    } else if (isStreaming && !wasStreaming) {
-      setStreamingAnnouncement("RepoPilot is responding");
-    } else if (!isStreaming && wasStreaming) {
-      setStreamingAnnouncement(
-        stopRequestedRef.current
+  const hasAssistantResponse = messages.some(
+    (message) => message.role === "assistant",
+  );
+  const streamingAnnouncement = error && !isStreaming
+    ? "Unable to get a response"
+    : hasToolError
+      ? "Unable to get repository information"
+      : isStreaming
+        ? "RepoPilot is responding"
+        : responseStopped
           ? "Response stopped"
-          : "Response complete",
-      );
-      stopRequestedRef.current = false;
-    }
-
-    previousStatusRef.current = status;
-    previousToolErrorRef.current = hasToolError;
-  }, [error, hasToolError, isStreaming, status]);
+          : hasAssistantResponse
+            ? "Response complete"
+            : "";
 
   /*
    * Load the selected repository so the AI always receives
@@ -189,7 +172,7 @@ export default function AssistantClient() {
 
       setShowJumpToLatest(false);
     }
-  }, [messages]);
+  }, [isStreaming, messages]);
 
   function handleMessagesScroll() {
     const container = messagesContainerRef.current;
@@ -236,6 +219,7 @@ export default function AssistantClient() {
       return;
     }
 
+    setResponseStopped(false);
     setMessageInput("");
 
     await sendMessage(
@@ -615,7 +599,7 @@ if (
                       aria-label="Stop response"
                       aria-busy="true"
                       onClick={() => {
-                        stopRequestedRef.current = true;
+                        setResponseStopped(true);
                         stop();
                       }}
                     >
